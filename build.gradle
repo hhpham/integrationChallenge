@@ -34,6 +34,8 @@ heroku {
     apiKey = 'c78d3231-5f5e-4b63-959a-93077b34fd83'
 
     appName = 'hh-integration-challenge'
+
+    buildpack = 'https://github.com/heroku/heroku-buildpack-gradle'
 }
 
 war {
@@ -43,5 +45,5 @@ war {
 defaultTasks "clean", "build"
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.2.1'
+    gradleVersion = '2.0'
 }
