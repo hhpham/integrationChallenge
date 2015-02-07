@@ -45,5 +45,7 @@ war {
 defaultTasks "clean", "build"
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.0'
+    gradleVersion = '1.6'
 }
+
+task Stage (dependsOn: [ 'Clean' , 'build' ])
