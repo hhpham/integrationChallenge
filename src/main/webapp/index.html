@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+</head>
+
+<body>
+
+<p>Test page</p>
+
+<div ng-app="" ng-controller="testController">
+
+    <p>Click button to request hello() from server</p>
+
+    <div class="box">
+        <input class="button" type="submit" ng-click="requestHello()"/>
+        <input class="button" type="submit" ng-click="reset()" value="reset"/>
+    </div>
+
+    value from server: <input type="text" ng-model="value"><br>
+    <br>
+
+</div>
+
+<script>
+    function testController($scope, $http) {
+        $scope.value= "...";
+
+        $scope.reset = function() {
+            $scope.value = "...";
+        }
+
+        $scope.requestHello = function() {
+            hello();
+        }
+
+        function hello() {
+            var req = {
+                method: 'GET',
+                url: 'rest/hello',
+            };
+            $http(req).
+                success(function(data) {
+                    if (data) {
+                        $scope.value = data;
+                    } else {
+                        $log.info("data is null");
+                    }
+                }).
+                error(function(data, status) {
+                    $log.error(req.url + ' failed, status: ' + status + '\n data: '+ data);
+                });
+        }
+    }
+
+</script>
+
+</body>
+</html>
