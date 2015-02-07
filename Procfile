@@ -1,0 +1,1 @@
+web: java -jar webapp-runner.jar build/libs/hh-integration-challenge.war
