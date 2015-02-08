@@ -2,20 +2,14 @@ apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'idea'
 apply plugin: 'jetty'
-apply plugin: 'heroku'
 
 repositories {
     mavenCentral()
 }
 
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url 'http://dl.bintray.com/vermeulen-mp/gradle-plugins' }
-    }
-    dependencies {
-        classpath 'com.wiredforcode:gradle-heroku-plugin:1.0.0'
-    }
+
+configurations {
+    runtimeOnly
 }
 
 dependencies {
@@ -26,16 +20,12 @@ dependencies {
     compile 'com.sun.jersey:jersey-servlet:1.13'
     testCompile 'junit:junit-dep:4.10'
 
-    runtime 'com.github.jsimone:webapp-runner:7.0.57.1'
-}
+    // to run our App on Heroku
+    runtimeOnly "org.mortbay.jetty:jetty-runner:8.1.1.v20120215"
+    // monitoring on Heroku
+    runtimeOnly "com.newrelic.agent.java:newrelic-agent:2.18.0"
 
-heroku {
-    //get this from heroku
-    apiKey = 'c78d3231-5f5e-4b63-959a-93077b34fd83'
-
-    appName = 'hh-integration-challenge'
-
-    buildpack = 'https://github.com/heroku/heroku-buildpack-gradle'
+//    runtime 'com.github.jsimone:webapp-runner:7.0.57.1'
 }
 
 war {
@@ -45,7 +35,20 @@ war {
 defaultTasks "clean", "build"
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.0-milestone-5'
+    gradleVersion = '2.0'
 }
 
-task Stage (dependsOn: [ 'Clean' , 'build' ])
+task copyToLib << {
+    copy {
+        from configurations.runtimeOnly.copy().setTransitive(false)
+        into "$buildDir/libs"
+        rename { name ->
+            def artifacts = configurations.runtimeOnly.resolvedConfiguration.resolvedArtifacts
+            def artifact = artifacts.find { it.file.name == name }
+            "${artifact.name}.${artifact.extension}"
+        }
+    }
+}
+
+task stage (dependsOn: ['copyToLib'])
+copyToLib.dependsOn build

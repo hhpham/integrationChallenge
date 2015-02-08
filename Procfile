@@ -1,1 +1,1 @@
-web: java -jar webapp-runner.jar build/libs/hh-integration-challenge.war
+web: java $JAVA_OPTS -jar build/libs/jetty-runner.jar --port $PORT build/libs/hh-integration-challenge.war
