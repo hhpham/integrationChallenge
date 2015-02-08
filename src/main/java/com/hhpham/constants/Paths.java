@@ -5,6 +5,8 @@ public class Paths {
     }
 
     private static final String SUBSCRIPTION = "/subscription";
+
+    public static final String LOGIN = "/login";
     public static final String SUBSCRIPTION_CREATE = SUBSCRIPTION + "/create";
     public static final String SUBSCRIPTION_CHANGE = SUBSCRIPTION + "/change";
     public static final String SUBSCRIPTION_CANCEL = SUBSCRIPTION + "/cancel";
