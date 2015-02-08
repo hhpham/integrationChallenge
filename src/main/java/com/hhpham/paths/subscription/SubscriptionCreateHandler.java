@@ -37,7 +37,7 @@ public class SubscriptionCreateHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(SubscriptionCreateHandler.class);
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_XML)
     public Response create(@QueryParam("url") String urlString)  {
 
         LOGGER.info("url received: {}", urlString);
@@ -51,7 +51,7 @@ public class SubscriptionCreateHandler {
             return Response.status(INTERNAL_SERVER_ERROR).entity(xStream.toXML(createResponse)).build();
         } else {
 
-            OAuthConsumer consumer = new DefaultOAuthConsumer("integrationchallenge-18344", "OckY0wLwtx1aiFA1");
+            OAuthConsumer consumer = new DefaultOAuthConsumer("integrationchallenge-18344", "oLIbun7AxSRu");
 
             String result = "";
             try {
