@@ -6,27 +6,16 @@ import com.hhpham.paths.subscription.response.CreateResponse;
 import com.thoughtworks.xstream.XStream;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.basic.DefaultOAuthConsumer;
-import oauth.signpost.exception.OAuthCommunicationException;
-import oauth.signpost.exception.OAuthExpectationFailedException;
-import oauth.signpost.exception.OAuthMessageSignerException;
-import org.glassfish.jersey.oauth1.signature.OAuth1Parameters;
-import org.glassfish.jersey.oauth1.signature.OAuth1Secrets;
-import org.glassfish.jersey.oauth1.signature.OAuth1Signature;
-import org.glassfish.jersey.server.oauth1.internal.OAuthServerRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
-
-import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
