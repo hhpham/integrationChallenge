@@ -3,18 +3,18 @@
     <display-name>jersey sample</display-name>
     <servlet>
         <servlet-name>Jersey</servlet-name>
-        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
         <init-param>
-            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-name>jersey.config.server.provider.packages</param-name>
             <param-value>com.hhpham.paths</param-value>
         </init-param>
 
-        <!-- the following is only needed if you want to use the built-in support
-        for mapping pojo objects to json. -->
-        <init-param>
-            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-            <param-value>true</param-value>
-        </init-param>
+        <!--&lt;!&ndash; the following is only needed if you want to use the built-in support-->
+        <!--for mapping pojo objects to json. &ndash;&gt;-->
+        <!--<init-param>-->
+            <!--<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>-->
+            <!--<param-value>true</param-value>-->
+        <!--</init-param>-->
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
