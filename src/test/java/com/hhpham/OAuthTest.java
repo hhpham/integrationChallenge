@@ -16,10 +16,13 @@ public class OAuthTest {
 
     @Test
     public void test() throws IOException, OAuthCommunicationException, OAuthExpectationFailedException, OAuthMessageSignerException {
-        OAuthConsumer consumer = new DefaultOAuthConsumer("Dummy", "secret");
+        OAuthConsumer consumer = new DefaultOAuthConsumer("integrationchallenge-18344", "OckY0wLwtx1aiFA1");
         URL url = new URL("https://www.appdirect.com/AppDirect/rest/api/events/dummyChange");
         HttpURLConnection request = (HttpURLConnection) url.openConnection();
         consumer.sign(request);
         request.connect();
+
+        System.out.println("Response: " + request.getResponseCode() + " "
+                + request.getResponseMessage());
     }
 }
