@@ -40,7 +40,7 @@ public class SubscriptionCreateHandler {
             return Response.status(INTERNAL_SERVER_ERROR).entity(xStream.toXML(createResponse)).build();
         } else {
 
-            OAuthConsumer consumer = new DefaultOAuthConsumer("integrationchallenge-18344", "oLIbun7AxSRu");
+            OAuthConsumer consumer = new DefaultOAuthConsumer("integrationchallenge-18344", "OckY0wLwtx1aiFA1");
 
             String result = "";
             try {
