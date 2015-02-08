@@ -1,5 +1,8 @@
 package com.hhpham;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.CharStreams;
+import com.google.common.io.Closeables;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.basic.DefaultOAuthConsumer;
 import oauth.signpost.exception.OAuthCommunicationException;
@@ -8,6 +11,8 @@ import oauth.signpost.exception.OAuthMessageSignerException;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -22,7 +27,15 @@ public class OAuthTest {
         consumer.sign(request);
         request.connect();
 
+        final InputStream inputStream = request.getInputStream();
+        String content = CharStreams.toString(new InputStreamReader(inputStream, Charsets.UTF_8));
+        Closeables.closeQuietly(inputStream);
+
         System.out.println("Response: " + request.getResponseCode() + " "
                 + request.getResponseMessage());
+
+        System.out.println("body: " + content);
+
+        request.disconnect();
     }
 }

@@ -1,8 +1,12 @@
 package com.hhpham.paths.subscription;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
+import com.google.common.io.CharStreams;
+import com.google.common.io.Closeables;
 import com.hhpham.constants.Paths;
 import com.hhpham.paths.subscription.response.CreateResponse;
+import com.hhpham.paths.subscription.util.ResponseBuilder;
 import com.thoughtworks.xstream.XStream;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.basic.DefaultOAuthConsumer;
@@ -15,6 +19,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -31,42 +37,41 @@ public class SubscriptionCreateHandler {
 
         LOGGER.info("url received: {}", urlString);
 
-        XStream xStream = new XStream();
-
         CreateResponse createResponse = new CreateResponse();
 
         if (Strings.isNullOrEmpty(urlString)) {
-            createResponse.setResponse("url is missing");
-            return Response.status(INTERNAL_SERVER_ERROR).entity(xStream.toXML(createResponse)).build();
+            createResponse.setSuccess(false);
+            createResponse.setMessage("url is missing");
+            return Response.status(INTERNAL_SERVER_ERROR).entity(ResponseBuilder.build(createResponse)).build();
         } else {
 
             OAuthConsumer consumer = new DefaultOAuthConsumer("integrationchallenge-18344", "OckY0wLwtx1aiFA1");
 
-            String result = "";
             try {
                 URL url = new URL(urlString);
                 HttpURLConnection request = (HttpURLConnection) url.openConnection();
                 consumer.sign(request);
                 request.connect();
 
-                result = "Response: " + request.getResponseCode() + " "
-                        + request.getResponseMessage();
+                final InputStream inputStream = request.getInputStream();
+                String content = CharStreams.toString(new InputStreamReader(inputStream, Charsets.UTF_8));
+                Closeables.closeQuietly(inputStream);
+
+                LOGGER.info("Response: {} {} ", request.getResponseCode(),request.getResponseMessage());
+                LOGGER.info("body: {}", content);
+
+                request.disconnect();
 
             } catch (Exception e) {
-                LOGGER.error("caught exception {}e",e);
+                LOGGER.error("caught exception {}",e);
             }
 
-            System.out.println(result);
+            createResponse.setSuccess(true);
+            createResponse.setMessage("Account creation successful");
+            // TODO generate account id
+            createResponse.setAccountIdentifier("1234");
 
-            LOGGER.info(result);
-
-            createResponse.setResponse("url is received");
-            String response = "<result>\n" +
-                    "    <success>true</success>\n" +
-                    "    <message>Account creation successful</message>\n" +
-                    "    <accountIdentifier>1</accountIdentifier>\n" +
-                    "</result>";
-            return Response.ok(response).build();
+            return Response.ok(ResponseBuilder.build(createResponse)).build();
         }
     }
 }
