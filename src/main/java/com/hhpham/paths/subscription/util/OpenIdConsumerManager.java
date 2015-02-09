@@ -1,7 +1,10 @@
 package com.hhpham.paths.subscription.util;
 
+import org.openid4java.association.AssociationSessionType;
 import org.openid4java.consumer.ConsumerException;
 import org.openid4java.consumer.ConsumerManager;
+import org.openid4java.consumer.InMemoryConsumerAssociationStore;
+import org.openid4java.consumer.InMemoryNonceVerifier;
 import org.openid4java.discovery.DiscoveryException;
 import org.openid4java.discovery.DiscoveryInformation;
 import org.openid4java.message.AuthRequest;
@@ -24,7 +27,12 @@ public class OpenIdConsumerManager {
 
     public static ConsumerManager getConsumerManager() {
         if (manager == null) {
-            return new ConsumerManager();
+            manager = new ConsumerManager();
+            manager.setAssociations(new InMemoryConsumerAssociationStore());
+            manager.setNonceVerifier(new InMemoryNonceVerifier(5000));
+            manager.setMinAssocSessEnc(AssociationSessionType.DH_SHA256);
+
+            return manager;
         } else {
             return manager;
         }
