@@ -59,7 +59,7 @@ public class LoginHandler extends Handler {
 //            session.setAttribute("discovered", discovered);
 
             // obtain a AuthRequest message to be sent to the OpenID provider
-            AuthRequest authReq = manager.authenticate(discovered, "https://hh-integration-challenge.herokuapp.com");
+            AuthRequest authReq = manager.authenticate(discovered, "https://hh-integration-challenge.herokuapp.com/rest/openid");
 
             return Response.seeOther(new URI(authReq.getDestinationUrl(true))).build();
         }
