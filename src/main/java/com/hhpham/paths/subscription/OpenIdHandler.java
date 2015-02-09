@@ -49,15 +49,16 @@ public class OpenIdHandler extends Handler {
         LOGGER.info("discovered {}", discovered);
 
         // extract the receiving URL from the HTTP request
-//        StringBuffer receivingURL = request.getRequestURL();
-        String receivingURL = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getRequestURI() + "?" + request.getQueryString();
+        StringBuffer receivingURL = request.getRequestURL();
+        final String replace = receivingURL.toString().replace("http", "https");
+        receivingURL = new StringBuffer(replace);
+
+        String queryString = request.getQueryString();
+        if (queryString != null && queryString.length() > 0) {
+            receivingURL.append("?").append(request.getQueryString());
+        }
 
         LOGGER.info("receivingURL: {}", receivingURL);
-
-//        String queryString = request.getQueryString();
-//        if (queryString != null && queryString.length() > 0)
-//            receivingURL.append("?").append(request.getQueryString());
-
         // verify the response
         VerificationResult verification = OpenIdConsumerManager.getConsumerManager().verify(receivingURL.toString(), openidResp, discovered);
 
