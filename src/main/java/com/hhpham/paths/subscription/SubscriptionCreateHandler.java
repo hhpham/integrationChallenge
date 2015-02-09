@@ -1,15 +1,10 @@
 package com.hhpham.paths.subscription;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
-import com.google.common.io.CharStreams;
-import com.google.common.io.Closeables;
 import com.hhpham.constants.Paths;
 import com.hhpham.domain.HttpResponse;
 import com.hhpham.paths.subscription.response.CreateResponse;
 import com.hhpham.paths.subscription.util.ResponseBuilder;
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.basic.DefaultOAuthConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,10 +14,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
