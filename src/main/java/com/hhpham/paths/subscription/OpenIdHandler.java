@@ -2,6 +2,7 @@ package com.hhpham.paths.subscription;
 
 import com.hhpham.constants.Paths;
 import com.hhpham.paths.subscription.util.OpenIdConsumerManager;
+import com.hhpham.paths.subscription.util.ResponseBuilder;
 import org.openid4java.association.AssociationException;
 import org.openid4java.consumer.VerificationResult;
 import org.openid4java.discovery.DiscoveryException;
@@ -23,6 +24,8 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+
 @Path(Paths.OPEN_ID)
 public class OpenIdHandler extends Handler {
 
@@ -43,15 +46,22 @@ public class OpenIdHandler extends Handler {
         HttpSession session = request.getSession();
 
         DiscoveryInformation discovered = (DiscoveryInformation) session.getAttribute("discovered");
+        LOGGER.info("discovered {}", discovered);
 
         // extract the receiving URL from the HTTP request
         StringBuffer receivingURL = request.getRequestURL();
+
+        LOGGER.info("receivingURL: {}", receivingURL);
+
         String queryString = request.getQueryString();
         if (queryString != null && queryString.length() > 0)
             receivingURL.append("?").append(request.getQueryString());
 
         // verify the response
         VerificationResult verification = OpenIdConsumerManager.getConsumerManager().verify(receivingURL.toString(), openidResp, discovered);
+
+        LOGGER.info("verification status {}", verification.getStatusMsg());
+        LOGGER.info("verification AuthResponse {}", verification.getAuthResponse());
 
         // examine the verification result and extract the verified identifier
         Identifier verified = verification.getVerifiedId();
@@ -64,7 +74,7 @@ public class OpenIdHandler extends Handler {
         else {
             // OpenID authentication failed
             LOGGER.info("verification failed {}", verified);
-            return Response.status(Response.Status.UNAUTHORIZED).entity("verification failed").build();
+            return Response.status(INTERNAL_SERVER_ERROR).build();
         }
 
     }

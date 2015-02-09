@@ -46,7 +46,9 @@ public class LoginHandler extends Handler {
 
             AuthRequest authReq = OpenIdConsumerManager.getAuthRequest(urlString, request);
 
-            return Response.seeOther(new URI(authReq.getDestinationUrl(true))).build();
+            String destinationUrl = authReq.getDestinationUrl(true);
+            LOGGER.info("destinationUrl {}", destinationUrl);
+            return Response.seeOther(new URI(destinationUrl)).build();
         }
     }
 }
