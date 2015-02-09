@@ -62,7 +62,7 @@ public class LoginHandler extends Handler {
 
             // obtain a AuthRequest message to be sent to the OpenID provider
             try {
-                AuthRequest authReq = manager.authenticate(discovered, urlString);
+                AuthRequest authReq = manager.authenticate(discovered, "https://hh-integration-challenge.herokuapp.com/rest/openid");
 
                 HttpResponse httpResponse = sendRequest(authReq.getDestinationUrl(true));
 
