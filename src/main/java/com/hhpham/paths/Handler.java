@@ -1,4 +1,4 @@
-package com.hhpham.paths.subscription;
+package com.hhpham.paths;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;

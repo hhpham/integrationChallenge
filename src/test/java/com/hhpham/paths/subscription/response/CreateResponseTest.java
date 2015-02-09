@@ -1,5 +1,6 @@
 package com.hhpham.paths.subscription.response;
 
+import com.hhpham.paths.response.CreateResponse;
 import com.thoughtworks.xstream.XStream;
 import junit.framework.TestCase;
 import org.junit.Test;

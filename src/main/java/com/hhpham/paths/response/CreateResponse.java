@@ -1,4 +1,4 @@
-package com.hhpham.paths.subscription.response;
+package com.hhpham.paths.response;
 
 public class CreateResponse implements Response {
 

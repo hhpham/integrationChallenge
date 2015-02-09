@@ -1,7 +1,7 @@
 package com.hhpham.paths.subscription.util;
 
-import com.hhpham.paths.subscription.response.CreateResponse;
-import com.hhpham.paths.subscription.response.Response;
+import com.hhpham.paths.response.CreateResponse;
+import com.hhpham.paths.response.Response;
 import com.thoughtworks.xstream.XStream;
 
 public class ResponseBuilder {

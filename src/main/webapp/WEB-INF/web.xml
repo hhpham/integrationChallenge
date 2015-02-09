@@ -7,14 +7,8 @@
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
             <param-value>com.hhpham.paths</param-value>
-        </init-param>
 
-        <!--&lt;!&ndash; the following is only needed if you want to use the built-in support-->
-        <!--for mapping pojo objects to json. &ndash;&gt;-->
-        <!--<init-param>-->
-            <!--<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>-->
-            <!--<param-value>true</param-value>-->
-        <!--</init-param>-->
+        </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
