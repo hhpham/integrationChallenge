@@ -1,14 +1,14 @@
 package com.hhpham.paths.subscription.util;
 
+import org.openid4java.association.AssociationException;
 import org.openid4java.association.AssociationSessionType;
-import org.openid4java.consumer.ConsumerException;
-import org.openid4java.consumer.ConsumerManager;
-import org.openid4java.consumer.InMemoryConsumerAssociationStore;
-import org.openid4java.consumer.InMemoryNonceVerifier;
+import org.openid4java.consumer.*;
 import org.openid4java.discovery.DiscoveryException;
 import org.openid4java.discovery.DiscoveryInformation;
+import org.openid4java.discovery.Identifier;
 import org.openid4java.message.AuthRequest;
 import org.openid4java.message.MessageException;
+import org.openid4java.message.ParameterList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,4 +60,33 @@ public class OpenIdConsumerManager {
         // obtain a AuthRequest message to be sent to the OpenID provider
         return getConsumerManager().authenticate(discovered, "https://hh-integration-challenge.herokuapp.com/rest/openid");
     }
+
+    public static VerificationResult getVerificationResult(HttpServletRequest request) throws MessageException, DiscoveryException, AssociationException {
+        ParameterList openidResp = new ParameterList(request.getParameterMap());
+
+        // retrieve the previously stored discovery information
+        HttpSession session = request.getSession();
+
+        DiscoveryInformation discovered = (DiscoveryInformation) session.getAttribute("discovered");
+        LOGGER.info("discovered {}", discovered);
+
+        // extract the receiving URL from the HTTP request
+        StringBuffer receivingURL = request.getRequestURL();
+        final String replace = receivingURL.toString().replace("http", "https");
+        receivingURL = new StringBuffer(replace);
+
+        String queryString = request.getQueryString();
+        if (queryString != null && queryString.length() > 0) {
+            receivingURL.append("?").append(request.getQueryString());
+        }
+
+        LOGGER.info("receivingURL: {}", receivingURL);
+        // verify the response
+        VerificationResult verification = OpenIdConsumerManager.getConsumerManager().verify(receivingURL.toString(), openidResp, discovered);
+
+        // examine the verification result and extract the verified identifier
+        return verification;
+    }
+
+
 }
