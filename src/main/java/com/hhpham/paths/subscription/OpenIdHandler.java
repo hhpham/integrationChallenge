@@ -21,9 +21,9 @@ public class OpenIdHandler extends Handler {
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public Response openId(@Context HttpServletRequest request) throws URISyntaxException {
+    public Response openId() throws URISyntaxException {
 
-        LOGGER.info("requestURL: {}", request.getRequestURI());
+//        LOGGER.info("requestURL: {}", request.getRequestURI());
 
         return Response.seeOther(new URI("https://hh-integration-challenge.herokuapp.com/")).build();
     }
