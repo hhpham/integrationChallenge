@@ -1,6 +1,7 @@
 package com.hhpham.paths.subscription.util;
 
 import com.hhpham.domain.event.OrderEvent;
+import com.hhpham.paths.response.CancelResponse;
 import com.hhpham.paths.response.CreateResponse;
 import com.hhpham.paths.response.Response;
 import com.thoughtworks.xstream.XStream;
@@ -11,6 +12,7 @@ public class ResponseBuilder {
     static {
         xStream = new XStream();
         xStream.alias("result", CreateResponse.class);
+        xStream.alias("result", CancelResponse.class);
         xStream.alias("event", OrderEvent.class);
     }
 

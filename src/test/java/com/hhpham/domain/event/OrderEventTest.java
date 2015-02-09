@@ -4,9 +4,7 @@ import com.thoughtworks.xstream.XStream;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -72,10 +70,16 @@ public class OrderEventTest {
 
         out.close();
 
+        // append another order
+        PrintWriter out2 = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
+        out2.println("\n" + orderEvent.getPayload());
+
+        out2.close();
+
         List<String> lines = Files.readAllLines(Paths.get(fileName),
                 Charset.defaultCharset());
         for (String line : lines) {
-            System.out.println(line);
+            System.out.println(line + "\n");
         }
     }
 

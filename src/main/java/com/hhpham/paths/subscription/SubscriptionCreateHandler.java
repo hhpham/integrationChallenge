@@ -17,6 +17,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
@@ -25,10 +28,11 @@ import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 public class SubscriptionCreateHandler extends Handler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SubscriptionCreateHandler.class);
+    private String orderFilename = "orders.txt";
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public Response create(@QueryParam("url") String urlString)  {
+    public Response create(@QueryParam("url") String urlString) throws IOException {
 
         LOGGER.info("url received: {}", urlString);
 
@@ -42,16 +46,25 @@ public class SubscriptionCreateHandler extends Handler {
 
             HttpResponse httpResponse = sendRequest(urlString);
 
-            LOGGER.info(httpResponse.toString());
+            if(httpResponse != null) {
+                LOGGER.info(httpResponse.toString());
+                OrderEvent orderEvent = (OrderEvent)ResponseBuilder.fromXml(httpResponse.getBody());
 
-            OrderEvent orderEvent = (OrderEvent)ResponseBuilder.fromXml(httpResponse.getBody());
+                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(orderFilename, true)));
+                out.println("\n" + orderEvent.getPayload());
+
+            } else {
+                createResponse.setSuccess(false);
+                createResponse.setMessage("creation failed");
+                return Response.status(INTERNAL_SERVER_ERROR).entity(ResponseBuilder.toXml(createResponse)).build();
+            }
 
             createResponse.setSuccess(true);
             createResponse.setMessage("Account creation successful");
             // TODO generate account id
             createResponse.setAccountIdentifier("1234");
 
-            return Response.ok(ResponseBuilder.toXml(new CreateResponse())).build();
+            return Response.ok(ResponseBuilder.toXml(createResponse)).build();
         }
     }
 }
