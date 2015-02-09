@@ -5,7 +5,8 @@
 ```$>gradlew clean build```
 
 the war file will be located under:
-```/build/libs/hh-integration-challenge.war```
+
+*/build/libs/hh-integration-challenge.war*
 
 **Necessary improvements**
 
