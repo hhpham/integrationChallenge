@@ -1,6 +1,7 @@
 package com.hhpham.paths.subscription;
 
 import com.google.common.base.Strings;
+import com.hhpham.constants.DbFiles;
 import com.hhpham.constants.Paths;
 import com.hhpham.domain.HttpResponse;
 import com.hhpham.domain.event.OrderEvent;
@@ -28,20 +29,17 @@ import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 public class SubscriptionCreateHandler extends Handler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SubscriptionCreateHandler.class);
-    private String orderFilename = "orders.txt";
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public Response create(@QueryParam("url") String urlString) throws IOException {
+    public Response create(@QueryParam("url") String urlString) {
 
         LOGGER.info("url received: {}", urlString);
 
         CreateResponse createResponse = new CreateResponse();
 
         if (Strings.isNullOrEmpty(urlString)) {
-            createResponse.setSuccess(false);
-            createResponse.setMessage("url is missing");
-            return Response.status(INTERNAL_SERVER_ERROR).entity(ResponseBuilder.toXml(createResponse)).build();
+            return getFailureResponse(createResponse, "url is missing");
         } else {
 
             HttpResponse httpResponse = sendRequest(urlString);
@@ -50,13 +48,19 @@ public class SubscriptionCreateHandler extends Handler {
                 LOGGER.info(httpResponse.toString());
                 OrderEvent orderEvent = (OrderEvent)ResponseBuilder.fromXml(httpResponse.getBody());
 
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(orderFilename, true)));
-                out.println("\n" + orderEvent.getPayload());
+                PrintWriter out = null;
+                try {
+                    out = new PrintWriter(new BufferedWriter(new FileWriter(DbFiles.ORDERS, true)));
+                } catch (IOException e) {
+                    return getFailureResponse(createResponse, "failed to write order to file");
+                } finally {
+                    out.println("\n" + orderEvent.getPayload());
+                }
+
+                out.close();
 
             } else {
-                createResponse.setSuccess(false);
-                createResponse.setMessage("creation failed");
-                return Response.status(INTERNAL_SERVER_ERROR).entity(ResponseBuilder.toXml(createResponse)).build();
+                return getFailureResponse(createResponse, "creation failed");
             }
 
             createResponse.setSuccess(true);
@@ -66,6 +70,12 @@ public class SubscriptionCreateHandler extends Handler {
 
             return Response.ok(ResponseBuilder.toXml(createResponse)).build();
         }
+    }
+
+    private Response getFailureResponse(CreateResponse createResponse, String message) {
+        createResponse.setSuccess(false);
+        createResponse.setMessage(message);
+        return Response.status(INTERNAL_SERVER_ERROR).entity(ResponseBuilder.toXml(createResponse)).build();
     }
 }
 

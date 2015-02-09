@@ -1,6 +1,7 @@
 package com.hhpham.paths.subscription;
 
 import com.google.common.base.Strings;
+import com.hhpham.constants.DbFiles;
 import com.hhpham.constants.Paths;
 import com.hhpham.domain.HttpResponse;
 import com.hhpham.domain.event.OrderEvent;
@@ -30,6 +31,7 @@ public class GetAllSubscriptionsHandler extends Handler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GetAllSubscriptionsHandler.class);
 
+
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response get()  {
@@ -37,7 +39,7 @@ public class GetAllSubscriptionsHandler extends Handler {
         List<String> lines = null;
         StringBuilder sb = new StringBuilder();
         try {
-            lines = Files.readAllLines(java.nio.file.Paths.get("orders.txt"),
+            lines = Files.readAllLines(java.nio.file.Paths.get(DbFiles.ORDERS),
                     Charset.defaultCharset());
             for (String line : lines) {
                 sb.append(line + "\n");

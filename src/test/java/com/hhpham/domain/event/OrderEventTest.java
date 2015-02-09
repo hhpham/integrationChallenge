@@ -65,11 +65,13 @@ public class OrderEventTest {
         final Object o1 = xStream.fromXML(orderEventString2);
 
         assertThat(((OrderEvent) o).getPayload().getCompany().getUuid()).isEqualTo("d15bb36e-5fb5-11e0-8c3c-00262d2cda03");
+        assertThat(((OrderEvent) o1).getPayload().getCompany().getUuid()).isEqualTo("5c028-614a-4983-a1ef-61e7ecc9c8c6");
+
     }
 
     @Test
     public void testPrintOrderToFile() throws IOException {
-        final String fileName = "orders.txt";
+        final String fileName = "ordersTest.txt";
         PrintWriter out = new PrintWriter(fileName);
 
         OrderEvent orderEvent = (OrderEvent)xStream.fromXML(orderEventString);
@@ -79,7 +81,8 @@ public class OrderEventTest {
 
         // append another order
         PrintWriter out2 = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
-        out2.println("\n" + orderEvent.getPayload());
+        OrderEvent orderEvent2 = (OrderEvent)xStream.fromXML(orderEventString2);
+        out2.println("\n" + orderEvent2.getPayload());
 
         out2.close();
 
