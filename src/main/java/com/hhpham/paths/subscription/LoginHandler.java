@@ -5,6 +5,12 @@ import com.hhpham.constants.Paths;
 import com.hhpham.domain.HttpResponse;
 import com.hhpham.paths.subscription.response.LoginResponse;
 import com.hhpham.paths.subscription.util.ResponseBuilder;
+import org.openid4java.consumer.ConsumerException;
+import org.openid4java.consumer.ConsumerManager;
+import org.openid4java.discovery.DiscoveryException;
+import org.openid4java.discovery.DiscoveryInformation;
+import org.openid4java.message.AuthRequest;
+import org.openid4java.message.MessageException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +20,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.util.List;
 
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
@@ -33,6 +41,41 @@ public class LoginHandler extends Handler {
         if (Strings.isNullOrEmpty(urlString)) {
             return Response.status(INTERNAL_SERVER_ERROR).entity("url is empty").build();
         } else {
+
+            ConsumerManager manager = new ConsumerManager();
+
+            // perform discovery on the user-supplied identifier
+            List discoveries = null;
+            try {
+                discoveries = manager.discover(urlString);
+            } catch (DiscoveryException e) {
+                LOGGER.error("discovery exception ", e);
+            }
+
+            // attempt to associate with the OpenID provider
+            // and retrieve one service endpoint for authentication
+            DiscoveryInformation discovered = manager.associate(discoveries);
+
+            // store the discovery information in the user's session for later use
+            // leave out for stateless operation / if there is no session
+//            session.setAttribute("discovered", discovered);
+
+            // obtain a AuthRequest message to be sent to the OpenID provider
+            try {
+                AuthRequest authReq = manager.authenticate(discovered, urlString);
+
+                HttpResponse httpResponse = sendRequest(authReq.getDestinationUrl(true));
+
+                LOGGER.info(httpResponse.toString());
+
+
+            } catch (MessageException e) {
+                LOGGER.error("MessageException",e);
+            } catch (ConsumerException e) {
+                LOGGER.error("ConsumerException", e);
+            }
+
+
             HttpResponse httpResponse = sendRequest(urlString);
 
             LOGGER.info(httpResponse.toString());
