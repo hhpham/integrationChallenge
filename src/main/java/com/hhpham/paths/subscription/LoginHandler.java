@@ -4,7 +4,6 @@ import com.google.common.base.Strings;
 import com.hhpham.constants.Paths;
 import com.hhpham.domain.HttpResponse;
 import com.hhpham.paths.subscription.response.LoginResponse;
-import com.hhpham.paths.subscription.util.ResponseBuilder;
 import org.openid4java.consumer.ConsumerException;
 import org.openid4java.consumer.ConsumerManager;
 import org.openid4java.discovery.DiscoveryException;
@@ -20,7 +19,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
@@ -32,7 +32,7 @@ public class LoginHandler extends Handler {
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public Response login(@QueryParam("url") String urlString) {
+    public Response login(@QueryParam("url") String urlString) throws URISyntaxException {
 
         LOGGER.info("url received: {}", urlString);
 
@@ -82,7 +82,7 @@ public class LoginHandler extends Handler {
 
             loginResponse.setSuccess(true);
 
-            return Response.ok(ResponseBuilder.build(loginResponse)).build();
+            return Response.seeOther(new URI("https://hh-integration-challenge.herokuapp.com/")).build();
         }
     }
 }
