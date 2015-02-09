@@ -7,6 +7,7 @@ public class OrderEvent {
     String type;
     Marketplace marketplace;
     Creator creator;
+    String flag;
     Payload payload;
 
     public OrderEvent() {}
@@ -43,12 +44,21 @@ public class OrderEvent {
         this.payload = payload;
     }
 
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("type", type)
                 .add("marketplace", marketplace)
                 .add("creator", creator)
+                .add("flag", flag)
                 .add("payload", payload)
                 .toString();
     }

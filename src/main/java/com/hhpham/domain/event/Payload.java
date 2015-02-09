@@ -6,6 +6,7 @@ public class Payload {
 
     Company company;
     Order order;
+    Configuration configuration;
 
     public Payload() {}
 
@@ -25,12 +26,20 @@ public class Payload {
         this.order = order;
     }
 
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
+    }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("company", company)
                 .add("order", order)
+                .add("configuration", configuration)
                 .toString();
     }
 }

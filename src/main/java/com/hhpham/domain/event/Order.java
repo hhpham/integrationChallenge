@@ -4,6 +4,7 @@ import com.google.common.base.MoreObjects;
 
 public class Order {
 
+    String pricingDuration;
     String editionCode;
     Item item;
 
@@ -25,9 +26,18 @@ public class Order {
         this.item = item;
     }
 
+    public String getPricingDuration() {
+        return pricingDuration;
+    }
+
+    public void setPricingDuration(String pricingDuration) {
+        this.pricingDuration = pricingDuration;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
+                .add("pricingDuration", pricingDuration)
                 .add("editionCode", editionCode)
                 .add("item", item)
                 .toString();

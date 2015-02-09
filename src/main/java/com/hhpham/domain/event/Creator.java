@@ -2,11 +2,13 @@ package com.hhpham.domain.event;
 
 public class Creator {
 
+    Address address;
     String email;
     String firstName;
     String lastName;
     String openId;
     String uuid;
+    String language;
 
     public Creator() {}
 
@@ -48,5 +50,21 @@ public class Creator {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

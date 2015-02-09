@@ -8,6 +8,7 @@ public class Company {
     String name;
     String phoneNumber;
     String website;
+    String country;
 
     public Company() {}
 
@@ -51,6 +52,14 @@ public class Company {
         this.website = website;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -59,6 +68,7 @@ public class Company {
                 .add("name", name)
                 .add("phoneNumber", phoneNumber)
                 .add("website", website)
+                .add("country", country)
                 .toString();
     }
 }
