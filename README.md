@@ -8,6 +8,9 @@ the war file will be located under:
 
 */build/libs/hh-integration-challenge.war*
 
+Note: The app can also by run locally with jetty using:
+ ```$>gradlew jettyRunWar```
+
 **Necessary improvements**
 
  - improve unit tests coverage
