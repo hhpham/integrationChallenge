@@ -66,21 +66,17 @@ public class LoginHandler extends Handler {
 
                 HttpResponse httpResponse = sendRequest(authReq.getDestinationUrl(true));
 
-                LOGGER.info(httpResponse.toString());
-
+                if(httpResponse != null) {
+                    LOGGER.info(httpResponse.toString());
+                } else {
+                    LOGGER.error("request failed");
+                }
 
             } catch (MessageException e) {
                 LOGGER.error("MessageException",e);
             } catch (ConsumerException e) {
                 LOGGER.error("ConsumerException", e);
             }
-
-
-            HttpResponse httpResponse = sendRequest(urlString);
-
-            LOGGER.info(httpResponse.toString());
-
-            loginResponse.setSuccess(true);
 
             return Response.seeOther(new URI("https://hh-integration-challenge.herokuapp.com/")).build();
         }
