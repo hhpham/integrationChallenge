@@ -7,19 +7,19 @@
 
 <body>
 
-<p>Test page</p>
+<p>Integration Challenge</p>
 
 <div ng-app="" ng-controller="testController">
 
-    <p>Click button to request hello() from server</p>
+    <p>Click submit to display all the subscriptions</p>
 
     <div class="box">
-        <input class="button" type="submit" ng-click="requestHello()"/>
-        <input class="button" type="submit" ng-click="reset()" value="reset"/>
+        <input class="button" type="submit" ng-click="getAllSubscriptions()"/>
     </div>
 
-    value from server: <input type="text" ng-model="value"><br>
+    all subscriptions received:
     <br>
+    {{value}}
 
 </div>
 
@@ -31,14 +31,14 @@
             $scope.value = "...";
         }
 
-        $scope.requestHello = function() {
-            hello();
+        $scope.getAllSubscriptions = function() {
+            getAllSubscriptions();
         }
 
-        function hello() {
+        function getAllSubscriptions() {
             var req = {
                 method: 'GET',
-                url: 'rest/hello',
+                url: 'rest/subscription/get',
             };
             $http(req).
                 success(function(data) {

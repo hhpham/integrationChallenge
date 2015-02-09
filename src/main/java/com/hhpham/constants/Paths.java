@@ -13,4 +13,5 @@ public class Paths {
     public static final String SUBSCRIPTION_CHANGE = SUBSCRIPTION + "/change";
     public static final String SUBSCRIPTION_CANCEL = SUBSCRIPTION + "/cancel";
     public static final String SUBSCRIPTION_STATUS = SUBSCRIPTION + "/status";
+    public static final String SUBSCRIPTION_GET = SUBSCRIPTION + "/get";
 }
