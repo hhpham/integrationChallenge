@@ -32,11 +32,9 @@ public class LoginHandler extends Handler {
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public Response login(@QueryParam("url") String urlString) throws URISyntaxException {
+    public Response login(@QueryParam("url") String urlString) throws URISyntaxException, MessageException, ConsumerException {
 
         LOGGER.info("url received: {}", urlString);
-
-        LoginResponse loginResponse = new LoginResponse();
 
         if (Strings.isNullOrEmpty(urlString)) {
             return Response.status(INTERNAL_SERVER_ERROR).entity("url is empty").build();
@@ -61,24 +59,9 @@ public class LoginHandler extends Handler {
 //            session.setAttribute("discovered", discovered);
 
             // obtain a AuthRequest message to be sent to the OpenID provider
-            try {
-                AuthRequest authReq = manager.authenticate(discovered, "https://hh-integration-challenge.herokuapp.com/rest/openid");
+            AuthRequest authReq = manager.authenticate(discovered, "https://hh-integration-challenge.herokuapp.com");
 
-                HttpResponse httpResponse = sendRequest(authReq.getDestinationUrl(true));
-
-                if(httpResponse != null) {
-                    LOGGER.info(httpResponse.toString());
-                } else {
-                    LOGGER.error("request failed");
-                }
-
-            } catch (MessageException e) {
-                LOGGER.error("MessageException",e);
-            } catch (ConsumerException e) {
-                LOGGER.error("ConsumerException", e);
-            }
-
-            return Response.seeOther(new URI("https://hh-integration-challenge.herokuapp.com/")).build();
+            return Response.seeOther(new URI(authReq.getDestinationUrl(true))).build();
         }
     }
 }

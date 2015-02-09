@@ -22,6 +22,7 @@ public class OpenIdHandler extends Handler {
     public Response openId() throws URISyntaxException {
 
 //        LOGGER.info("requestURL: {}", request.getRequestURI());
+        LOGGER.info("in openid");
 
         return Response.seeOther(new URI("https://hh-integration-challenge.herokuapp.com/")).build();
     }
