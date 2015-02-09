@@ -11,6 +11,7 @@ import org.openid4java.discovery.DiscoveryException;
 import org.openid4java.discovery.DiscoveryInformation;
 import org.openid4java.message.AuthRequest;
 import org.openid4java.message.MessageException;
+import org.openid4java.message.ax.FetchRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +47,13 @@ public class LoginHandler extends Handler {
 
             AuthRequest authReq = OpenIdConsumerManager.getAuthRequest(urlString, request);
 
+            // Attribute Exchange example: fetching the 'email' attribute
+            FetchRequest fetch = FetchRequest.createFetchRequest();
+            fetch.addAttribute("email", "http://schema.openid.net/contact/email", true);
+            fetch.addAttribute("fullname", "http://schema.openid.net/namePerson", true);
+
+            // attach the extension to the authentication request
+            authReq.addExtension(fetch);
             String destinationUrl = authReq.getDestinationUrl(true);
             LOGGER.info("destinationUrl {}", destinationUrl);
             return Response.seeOther(new URI(destinationUrl)).build();
